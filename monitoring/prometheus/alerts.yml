@@ -1,0 +1,39 @@
+groups:
+  - name: uptime_alerts
+    interval: 30s
+    rules:
+      - alert: UptimeBelowTarget
+        expr: |
+          (
+            sum(rate(health_check_healthy[5m])) 
+            / 
+            sum(rate(health_check_total[5m]))
+          ) * 100 < 99.5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Platform uptime below 99.5% target"
+          description: "Current uptime is {{ $value }}%, below the 99.5% target"
+
+      # ServiceDown alert - only checks services that are actually being scraped
+      # Currently only Prometheus itself is scraped, so this alert is disabled
+      # Uncomment and update when exporters are added
+      # - alert: ServiceDown
+      #   expr: up{job=~"prometheus"} == 0
+      #   for: 2m
+      #   labels:
+      #     severity: critical
+      #   annotations:
+      #     summary: "Service {{ $labels.job }} is down"
+      #     description: "Service {{ $labels.job }} has been down for more than 2 minutes"
+
+      - alert: HighResponseTime
+        expr: health_check_response_time_ms > 1000
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High response time detected"
+          description: "Service {{ $labels.service }} has response time of {{ $value }}ms"
+

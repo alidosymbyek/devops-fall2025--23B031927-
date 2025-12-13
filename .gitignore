@@ -1,0 +1,54 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+*.egg-info/
+dist/
+build/
+
+# Environment variables
+.env
+.env.local
+
+# SSL Certificates (sensitive)
+postgres-ssl/
+*.key
+*.crt
+*.pem
+*.csr
+*.srl
+
+# Logs
+logs/
+*.log
+
+# Data
+data/raw/*
+data/processed/*
+data/staging/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!data/staging/.gitkeep
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Airflow
+airflow/logs/
+airflow/__pycache__/
+
+# Docker
+.dockerignore

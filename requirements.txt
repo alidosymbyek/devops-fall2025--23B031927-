@@ -1,0 +1,18 @@
+# Core dependencies
+pandas==2.1.4
+sqlalchemy==2.0.23
+psycopg2-binary==2.9.9
+python-dotenv==1.0.0
+pyyaml==6.0.1
+
+# For API requests
+requests==2.31.0
+
+# For data validation
+great-expectations==0.18.8
+
+# Logging
+loguru==0.7.2
+
+# Kafka for real-time stream processing
+kafka-python==2.3.0
