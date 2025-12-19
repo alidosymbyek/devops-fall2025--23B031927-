@@ -1,0 +1,22 @@
+database:
+  host: ${DB_HOST}
+  port: ${DB_PORT}
+  name: ${DB_NAME}
+  user: ${DB_USER}
+  password: ${DB_PASSWORD}
+
+data_sources:
+  csv_folder: ./data/raw
+  api_endpoints:
+    - name: sample_api
+      url: https://jsonplaceholder.typicode.com/users
+      
+logging:
+  level: INFO
+  folder: ./logs
+
+pipeline:
+  schedule: daily
+  retry_count: 3
+  # Optional: Write intermediate files for debugging/backup
+  write_intermediate_files: true  # Set to false to disable file writing (faster)
