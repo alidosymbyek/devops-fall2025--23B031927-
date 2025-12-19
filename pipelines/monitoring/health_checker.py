@@ -19,15 +19,28 @@ class HealthChecker:
     """Check health status of all platform services"""
     
     def __init__(self):
+        # Detect if running locally (not in Docker) to adjust service addresses
+        is_docker = os.path.exists('/.dockerenv')
+        
+        # Kafka configuration - adjust based on environment
+        if is_docker:
+            kafka_host = 'kafka'
+            kafka_port = 29092  # Internal Docker network port
+            airflow_url = 'http://airflow-webserver:8080/health'
+        else:
+            kafka_host = 'localhost'
+            kafka_port = 9092  # External exposed port
+            airflow_url = 'http://localhost:8080/health'
+        
         self.services = {
             'airflow_webserver': {
-                'url': 'http://airflow-webserver:8080/health',
+                'url': airflow_url,
                 'type': 'http',
                 'timeout': 5
             },
             'postgres': {
-                'host': os.getenv('DB_HOST', 'postgres'),
-                'port': int(os.getenv('DB_PORT', 5432)),
+                'host': os.getenv('DB_HOST', 'postgres' if is_docker else 'localhost'),
+                'port': int(os.getenv('DB_PORT', 5432 if is_docker else 5434)),
                 'database': os.getenv('DB_NAME', 'dataplatform'),
                 'user': os.getenv('DB_USER', 'datauser'),
                 'password': os.getenv('DB_PASSWORD', 'mypassword'),
@@ -35,8 +48,8 @@ class HealthChecker:
                 'timeout': 5
             },
             'kafka': {
-                'host': 'kafka',
-                'port': 29092,  # Use internal port for Docker network
+                'host': kafka_host,
+                'port': kafka_port,
                 'type': 'kafka',
                 'timeout': 5
             }
